@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Show — Listen &amp; Follow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#10161d;
+    --panel:#1a232c;
+    --panel-line:#2a3540;
+    --paper:#f3efe4;
+    --paper-dim:#b9beb5;
+    --amber:#e8a33d;
+    --blush:#e2a3ac;
+    --teal:#5b9c93;
+    --rose:#c1666b;
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-size:.72rem;
+    color:var(--amber);
+  }
+
+  h1, h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    margin:0;
+    color:var(--paper);
+  }
+
+  a{color:inherit;}
+
+  .eyebrow.blush{color:var(--blush);}
+
+  /* ---------- layout shell ---------- */
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:96px 0 56px;
+    text-align:center;
+    position:relative;
+  }
+
+  .hero .eyebrow{display:block; margin-bottom:18px;}
+
+  .hero h1{
+    font-size:clamp(2.6rem, 7vw, 4.4rem);
+    letter-spacing:-0.01em;
+    line-height:1.02;
+  }
+
+  .tagline{
+    max-width:480px;
+    margin:20px auto 0;
+    color:var(--paper-dim);
+    font-size:1.05rem;
+  }
+
+  /* waveform signature divider */
+  .waveform{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:5px;
+    height:44px;
+    margin:44px 0;
+  }
+  .waveform span{
+    width:4px;
+    border-radius:2px;
+    background:linear-gradient(180deg, var(--blush), var(--teal));
+    animation:pulse 2.4s ease-in-out infinite;
+    opacity:.85;
+  }
+  @keyframes pulse{
+    0%,100%{transform:scaleY(.35);}
+    50%{transform:scaleY(1);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .waveform span{animation:none; transform:scaleY(.7);}
+  }
+
+  /* ---------- listen dial (platform buttons) ---------- */
+  .dial{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+
+  .dial-btn{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:13px 22px;
+    border-radius:999px;
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    text-decoration:none;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.82rem;
+    letter-spacing:.03em;
+    color:var(--paper);
+    transition:border-color .2s ease, transform .2s ease, background .2s ease;
+  }
+  .dial-btn:hover{
+    transform:translateY(-2px);
+    border-color:var(--blush);
+    background:#212c36;
+  }
+  .dial-btn svg{width:20px; height:20px; flex-shrink:0;}
+
+  /* ---------- section frame ---------- */
+  section{padding:52px 0;}
+  .rule{
+    border:none;
+    border-top:1px solid var(--panel-line);
+    margin:0;
+  }
+
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin-bottom:26px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .section-head .eyebrow{margin:0;}
+  .section-head h2{font-size:1.5rem;}
+
+  .section-head .chevron{
+    margin-left:auto;
+    width:18px;
+    height:18px;
+    color:var(--paper-dim);
+    transition:transform .25s ease;
+    flex-shrink:0;
+  }
+  .section-head[aria-expanded="false"] .chevron{
+    transform:rotate(-90deg);
+  }
+
+  .collapsible{
+    display:grid;
+    grid-template-rows:1fr;
+    transition:grid-template-rows .3s ease;
+  }
+  .collapsible > div{overflow:hidden;}
+  .collapsible[data-collapsed="true"]{
+    grid-template-rows:0fr;
+  }
+
+  /* ---------- photo ---------- */
+  .frame{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:var(--radius);
+    padding:14px;
+  }
+  .frame img{
+    display:block;
+    width:100%;
+    aspect-ratio:4/3;
+    object-fit:cover;
+    border-radius:8px;
+    background:#232e38;
+  }
+  .frame figcaption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.75rem;
+    color:var(--paper-dim);
+    padding:12px 6px 2px;
+  }
+  figure{margin:0;}
+
+  /* ---------- about ---------- */
+  .about p{
+    color:var(--paper-dim);
+    font-size:1.02rem;
+    max-width:60ch;
+  }
+
+  /* ---------- follow (social row) ---------- */
+  .follow-row{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .icon-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .icon-btn:hover{
+    transform:translateY(-2px);
+    border-color:var(--rose);
+  }
+  .icon-btn svg{width:22px; height:22px;}
+
+  /* ---------- contact ---------- */
+  .contact-card{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:var(--radius);
+    padding:32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .contact-card p{margin:0; color:var(--paper-dim);}
+  .email-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:13px 24px;
+    border-radius:999px;
+    background:var(--rose);
+    color:#1a1010;
+    text-decoration:none;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.82rem;
+    font-weight:500;
+    transition:filter .2s ease;
+    white-space:nowrap;
+  }
+  .email-btn:hover{filter:brightness(1.1);}
+
+  footer{
+    text-align:center;
+    padding:40px 0 60px;
+    color:var(--panel-line);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    letter-spacing:.05em;
+  }
+
+  @media (max-width:520px){
+    .hero{padding:64px 0 40px;}
+    .contact-card{flex-direction:column; align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <span class="eyebrow blush">Unofficial Life Advice</span>
+    <!-- EDIT: replace with your show's name -->
+    <h1>This Will Be on the Test</h1>
+    <!-- EDIT: replace with your one-line description / tagline -->
+    <p class="tagline">Making adulting easier, one episode at a time.</p>
+
+    <div class="waveform" aria-hidden="true">
+      <span style="height:26px; animation-delay:0s;"></span>
+      <span style="height:40px; animation-delay:.15s;"></span>
+      <span style="height:18px; animation-delay:.3s;"></span>
+      <span style="height:36px; animation-delay:.45s;"></span>
+      <span style="height:44px; animation-delay:.6s;"></span>
+      <span style="height:22px; animation-delay:.75s;"></span>
+      <span style="height:34px; animation-delay:.9s;"></span>
+    </div>
+
+    <!-- ============ LISTEN LINKS ============ -->
+    <!-- EDIT: replace href="#" with your real show links -->
+    <div class="dial">
+      <a class="dial-btn" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/><path d="M7 9.5c3-1 7-1 10 .5M7.5 12.5c2.5-.8 6-.8 8.5.3M8 15.3c2-.6 4.5-.6 6.3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Spotify
+      </a>
+      <a class="dial-btn" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><path d="M12 14.2v5.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M9 11a3 3 0 0 1 6 0c0 1.3-.7 1.9-1.4 2.5-.5.4-1 .8-1 1.4M8.3 9a5.2 5.2 0 0 1 7.4 0M6.7 7.3a7.6 7.6 0 0 1 10.6 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Apple Podcasts
+      </a>
+    </div>
+  </header>
+
+  <hr class="rule">
+
+  <!-- ============ PHOTO ============ -->
+  <section class="photo">
+    <div class="section-head" data-toggle aria-expanded="true">
+      <h2>Behind the mic</h2>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="collapsible"><div>
+    <figure class="frame">
+      <img src="hosts-photo.jpg" alt="The two hosts giving a thumbs up in front of a chalkboard that reads 'This will be on the test'">
+      <figcaption>Yes, it'll be on the test.</figcaption>
+    </figure>
+    </div></div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- ============ ABOUT ============ -->
+  <section class="about">
+    <div class="section-head" data-toggle aria-expanded="true">
+      <h2>About the show</h2>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="collapsible"><div>
+    <p>Ever wondered how to budget, do laundry, or study for an exam? Each week, we break down everyday life skills and make them simple, entertaining, and easy to understand.</p>
+    </div></div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- ============ FOLLOW ============ -->
+  <section class="follow">
+    <div class="section-head" data-toggle aria-expanded="true">
+      <h2>Follow along</h2>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="collapsible"><div>
+    <p class="tagline" style="margin:0 0 22px; text-align:left; max-width:52ch;">Clips, behind-the-scenes, and extras between episodes.</p>
+    <!-- EDIT: replace href="#" with your real profile links -->
+    <div class="dial" style="justify-content:flex-start;">
+      <a class="dial-btn" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></svg>
+        Instagram
+      </a>
+      <a class="dial-btn" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="5.5" width="19" height="13" rx="4" stroke="currentColor" stroke-width="1.6"/><path d="M10.3 9.3l4.6 2.7-4.6 2.7V9.3z" fill="currentColor"/></svg>
+        YouTube
+      </a>
+    </div>
+    </div></div>
+  </section>
+
+  <hr class="rule">
+
+  <!-- ============ CONTACT ============ -->
+  <section class="contact">
+    <div class="section-head" data-toggle aria-expanded="true">
+      <h2>Get in touch</h2>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="collapsible"><div>
+    <div class="contact-card">
+      <p>Questions, guest ideas, or feedback — we'd love to hear from you.</p>
+      <a class="email-btn" href="mailto:onthetest.pod@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        onthetest.pod@gmail.com
+      </a>
+    </div>
+    </div></div>
+  </section>
+
+  <footer>© <span id="year"></span> — This Will Be on the Test</footer>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  document.querySelectorAll('[data-toggle]').forEach(head => {
+    head.addEventListener('click', () => {
+      const body = head.nextElementSibling;
+      const expanded = head.getAttribute('aria-expanded') === 'true';
+      head.setAttribute('aria-expanded', String(!expanded));
+      body.setAttribute('data-collapsed', String(expanded));
+    });
+  });
+</script>
+</body>
+</html>
